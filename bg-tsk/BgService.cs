@@ -23,13 +23,11 @@ namespace bg_tsk
         {
             while(!stoppingToken.IsCancellationRequested)
             {
-                using (var scope = _serviceProvider.CreateScope())
-                {
-                    _logger.LogInformation("From my BgService: ExecuteAsync {dateTime}", DateTime.Now);
-                    var scopedService = scope.ServiceProvider.GetRequiredService<IScopedService>();
-                    scopedService.Write();
-                    await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
-                }
+                using var scope = _serviceProvider.CreateScope();
+                _logger.LogInformation("From my BgService: ExecuteAsync {dateTime}", DateTime.Now);
+                var scopedService = scope.ServiceProvider.GetRequiredService<IScopedService>();
+                scopedService.Write();
+                await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
             }
         }
 
